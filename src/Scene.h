@@ -6,17 +6,32 @@
 
 class Scene {
 
-	ofShader phongShader;
+	ofShader gBufferShader, deferredShader;
 
-	ofLight light;
+	ofFbo gBuffer;
+
+	ofEasyCam cam;
+
+	vector<ofLight> lights;
 	ofMaterial material;
 
+	ofParameter<bool> bDrawGBuffer;
+	
 	public:
+		ofParameterGroup parameters;
 		Scene();
 
-		void begin();
-		void end();
+		void setupGBuffer();
+		void loadShaders();
+
+		void beginGBuffer(const ofEasyCam& cam);
+		void endGBuffer();
+
+		void render();
+
+		void drawGBuffer();
 		
+		void addLight(const ofLight& light);
 		void setLight(const ofLight& light);
 		void setMaterial(ofMaterial material);
 };

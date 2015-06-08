@@ -2,7 +2,10 @@
 
 #include "ofMain.h"
 
+#include "ofxGui.h"
+
 #include "Scene.h"
+#include "ExtSphere.h"
 
 class ofApp : public ofBaseApp{
 
@@ -12,7 +15,11 @@ class ofApp : public ofBaseApp{
 	ofLight light;
 	ofMaterial material;
 
+	ExtSphere extSphere;
+
 	int lightLat, lightLon, lightDist;
+
+	ofxPanel gui;
 
 	public:
 		void setup();
@@ -20,6 +27,7 @@ class ofApp : public ofBaseApp{
 		void setupMaterial();
 		void update();
 		void draw();
+		void drawScene();
 		void drawLight();
 		void drawGrid();
 		void keyPressed(int key);

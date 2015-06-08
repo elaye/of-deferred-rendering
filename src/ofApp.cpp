@@ -4,10 +4,18 @@ void ofApp::setup(){
 	setupLight();
 	setupMaterial();
 
+	// scene.addLight(light);
 	scene.setLight(light);
 	scene.setMaterial(material);
 
-	cam.orbit(0, -30, 300);
+	extSphere.setup();
+
+	cam.orbit(0, -10, 300);
+	ofVec3f p = cam.getPosition();
+	cam.setPosition(p.x, p.y + 20.0, p.z);
+	// cam.setupPerspective(true, 60, 1, 2000);
+
+	gui.setup(scene.parameters);
 }
 
 void ofApp::setupLight(){
@@ -34,13 +42,27 @@ void ofApp::draw(){
 	ofBackgroundGradient( ofColor(40,40,40), ofColor(0,0,0), OF_GRADIENT_CIRCULAR);	
 		
 	ofEnableDepthTest();
+
+	scene.beginGBuffer(cam);
 	cam.begin();
 		drawGrid();
-		scene.begin();
-			ofDrawSphere(0, 0, 0, 150);
-		scene.end();
+		drawScene();
 		drawLight();
-	cam.end();
+		cam.end();
+	scene.endGBuffer();
+
+	ofDisableDepthTest();
+	scene.render();
+
+	// ofSetColor(ofColor::white);
+	// scene.drawGBuffer();
+	gui.draw();
+}
+
+void ofApp::drawScene(){
+	ofSetColor(material.getAmbientColor());
+	// ofDrawSphere(0, 0, 0, 150);
+	extSphere.draw();
 }
 
 void ofApp::drawLight(){
@@ -62,6 +84,9 @@ void ofApp::drawGrid(){
 
 void ofApp::keyPressed(int key){
 	switch(key){
+		case 'r':
+			scene.loadShaders();
+			break;
 		case 356:
 			lightLat += 3;
 			light.orbit(lightLat, lightLon, lightDist);
